@@ -47,9 +47,25 @@ def get_eyes(image):
 
     return image
 
+
 def get_face(image):
     cvo = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_frontalface_default.xml')
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # 识别面部
+    faces = cvo.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(10, 10), flags=cv2.CASCADE_SCALE_IMAGE)
+
+    # 给识别的脸花方框
+    for (x, y, w, h) in faces:
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+    return image
+
+
+def get_face_1(image):
+    cvo = cv2.CascadeClassifier('haarcascade_profileface.xml')
+    cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_profileface.xml')
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # 识别面部
@@ -97,6 +113,7 @@ def get_face_with_video():
 def get_face_with_image(face_path):
     img = cv2.imread(face_path)
     img = get_face(img)
+    img = get_face_1(img)
     img = get_eyes(img)
     img = get_mouth(img)
     img = get_nose(img)
@@ -106,4 +123,4 @@ def get_face_with_image(face_path):
 if __name__ == '__main__':
     # get_face_with_video()
 
-    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\image1.jpg')
+    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\image.jpg')
