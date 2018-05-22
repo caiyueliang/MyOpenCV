@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
-
+import time
 
 def get_face(image):
     cvo = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-    cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\haarcascade_frontalface_default.xml')
+    cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_frontalface_default.xml')
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # 识别面部
@@ -17,9 +17,8 @@ def get_face(image):
     return image
 
 
-if __name__ == '__main__':
+def get_face_with_video():
     cam = cv2.VideoCapture(0)   # 调用计算机摄像头，一般默认为0
-    print('cam', cam, cam.isOpened())
 
     width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH) + 0.5)
     height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT) + 0.5)
@@ -33,7 +32,6 @@ if __name__ == '__main__':
         if ret is True:
             # 输出当前帧
             frame = get_face(frame)
-            print(frame)
             out.write(frame)
 
             cv2.imshow('My Camera', frame)
@@ -46,3 +44,15 @@ if __name__ == '__main__':
     out.release()
     cam.release()
     cv2.destroyWindow()
+
+
+def get_face_with_image(face_path):
+    img = cv2.imread(face_path)
+    img = get_face(img)
+    cv2.imwrite('data.jpg', img)
+
+
+if __name__ == '__main__':
+    # get_face_with_video()
+
+    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\image.jpg')
