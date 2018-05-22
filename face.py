@@ -3,6 +3,36 @@ import numpy as np
 import time
 
 
+def get_mouth(image):
+    cvo = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
+    cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_mcs_mouth.xml')
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # 识别面部
+    faces = cvo.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(10, 10), flags=cv2.CASCADE_SCALE_IMAGE)
+
+    # 给识别的脸花方框
+    for (x, y, w, h) in faces:
+        cv2.rectangle(image, (x, y), (x+w, y+h), (255, 255, 0), 2)
+
+    return image
+
+
+def get_nose(image):
+    cvo = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
+    cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_mcs_nose.xml')
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # 识别面部
+    faces = cvo.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(10, 10), flags=cv2.CASCADE_SCALE_IMAGE)
+
+    # 给识别的脸花方框
+    for (x, y, w, h) in faces:
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
+
+    return image
+
+
 def get_eyes(image):
     cvo = cv2.CascadeClassifier('haarcascade_eye.xml')
     cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_eye.xml')
@@ -48,6 +78,8 @@ def get_face_with_video():
             # 输出当前帧
             frame = get_face(frame)
             frame = get_eyes(frame)
+            frame = get_mouth(frame)
+            frame = get_nose(frame)
             out.write(frame)
 
             cv2.imshow('My Camera', frame)
@@ -66,10 +98,12 @@ def get_face_with_image(face_path):
     img = cv2.imread(face_path)
     img = get_face(img)
     img = get_eyes(img)
+    img = get_mouth(img)
+    img = get_nose(img)
     cv2.imwrite('data.jpg', img)
 
 
 if __name__ == '__main__':
-    get_face_with_video()
+    # get_face_with_video()
 
-    # get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\image1.jpg')
+    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\image1.jpg')
