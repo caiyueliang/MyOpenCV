@@ -3,6 +3,36 @@ import numpy as np
 import time
 
 
+def get_fullbody(image):
+    cvo = cv2.CascadeClassifier('haarcascade_fullbody.xml')
+    cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_fullbody.xml')
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # 识别面部
+    faces = cvo.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(10, 10), flags=cv2.CASCADE_SCALE_IMAGE)
+
+    # 给识别的脸花方框
+    for (x, y, w, h) in faces:
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 255), 2)
+
+    return image
+
+
+def get_upperbody(image):
+    cvo = cv2.CascadeClassifier('haarcascade_upperbody.xml')
+    cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_upperbody.xml')
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # 识别面部
+    faces = cvo.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(10, 10), flags=cv2.CASCADE_SCALE_IMAGE)
+
+    # 给识别的脸花方框
+    for (x, y, w, h) in faces:
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 255), 2)
+
+    return image
+
+
 def get_mouth(image):
     cvo = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
     cvo.load('C:\\Soft\\PythonWorkspace\\MyOpenCV\\opencv_data\\haarcascade_mcs_mouth.xml')
@@ -94,8 +124,10 @@ def get_face_with_video():
             # 输出当前帧
             frame = get_face(frame)
             frame = get_eyes(frame)
-            frame = get_mouth(frame)
-            frame = get_nose(frame)
+            # frame = get_mouth(frame)
+            # frame = get_nose(frame)
+            frame = get_fullbody(frame)
+            frame = get_upperbody(frame)
             out.write(frame)
 
             cv2.imshow('My Camera', frame)
@@ -110,17 +142,21 @@ def get_face_with_video():
     cv2.destroyWindow()
 
 
-def get_face_with_image(face_path):
+def get_face_with_image(face_path, save_name):
     img = cv2.imread(face_path)
     img = get_face(img)
-    img = get_face_1(img)
-    img = get_eyes(img)
-    img = get_mouth(img)
-    img = get_nose(img)
-    cv2.imwrite('data.jpg', img)
+    # img = get_face_1(img)
+    # img = get_eyes(img)
+    # img = get_mouth(img)
+    # img = get_nose(img)
+    img = get_fullbody(img)
+    img = get_upperbody(img)
+    cv2.imwrite(save_name, img)
 
 
 if __name__ == '__main__':
     # get_face_with_video()
 
-    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\image.jpg')
+    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg.jpg', 'save.jpg')
+    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg1.jpg', 'save1.jpg')
+    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg2.jpg', 'save2.jpg')
