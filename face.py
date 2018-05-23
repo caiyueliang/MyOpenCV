@@ -108,8 +108,21 @@ def get_face_1(image):
     return image
 
 
+# 加载播放video
+def load_video(video_path):
+    cap = cv2.VideoCapture(video_path)
+    while (cap.isOpened()):
+        ret, frame = cap.read()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        cv2.imshow('frame', gray)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
+
 def get_face_with_video():
-    cam = cv2.VideoCapture(0)   # 调用计算机摄像头，一般默认为0
+    cam = cv2.VideoCapture(0)                                           # 调用计算机摄像头，一般默认为0
 
     width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH) + 0.5)
     height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT) + 0.5)
@@ -118,8 +131,7 @@ def get_face_with_video():
     out = cv2.VideoWriter('output.mp4', fourcc, 20.0, (width, height))  # 创建videowriter对象
 
     while(cam.isOpened() is True):
-        # 读取帧摄像头
-        ret, frame = cam.read()
+        ret, frame = cam.read()             # 逐帧捕获
         if ret is True:
             # 输出当前帧
             frame = get_face(frame)
@@ -139,11 +151,17 @@ def get_face_with_video():
 
     out.release()
     cam.release()
-    cv2.destroyWindow()
+    cv2.destroyAllWindow()
 
 
 def get_face_with_image(face_path, save_name):
-    img = cv2.imread(face_path)
+    # 使用函数cv.imread（）来读取图像。图像应该在工作目录中，或者应该给出图像的完整路径。
+    # 第二个参数是一个标志，用于指定应读取图像的方式。
+    # cv.IMREAD_COLOR：加载彩色图像。图像的任何透明度都将被忽略。这是默认标志。
+    # cv.IMREAD_GRAYSCALE：以灰度模式加载图像
+    # cv.IMREAD_UNCHANGED：加载包含Alpha通道的图像
+    img = cv2.imread(face_path, cv2.IMREAD_COLOR)
+
     img = get_face(img)
     # img = get_face_1(img)
     # img = get_eyes(img)
@@ -151,12 +169,18 @@ def get_face_with_image(face_path, save_name):
     # img = get_nose(img)
     img = get_fullbody(img)
     img = get_upperbody(img)
-    cv2.imwrite(save_name, img)
+
+    cv2.imwrite(save_name, img)     # 保存图片
+
+    cv2.imshow('imshow', img)       # 显示图片
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
     # get_face_with_video()
+    load_video('output.mp4')
 
-    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg.jpg', 'save.jpg')
-    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg1.jpg', 'save1.jpg')
-    get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg2.jpg', 'save2.jpg')
+    # get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg.jpg', 'save.jpg')
+    # get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg1.jpg', 'save1.jpg')
+    # get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg2.jpg', 'save2.jpg')
