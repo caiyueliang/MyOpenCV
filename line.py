@@ -3,10 +3,11 @@ import cv2 as cv
 
 
 def image_show(img):
-    while (True):
-        cv.imshow('[draw]press "q" to exit', img)
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
+    # while (True):
+    cv.imshow('[draw]press "q" to exit', img)
+    cv.waitKey(0)
+    #    if cv.waitKey(1) & 0xFF == ord('q'):
+    #        break
     cv.destroyAllWindows()
 
 
