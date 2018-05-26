@@ -6,6 +6,7 @@ import numpy as np
 # 'EVENT_MBUTTONDOWN', 'EVENT_MBUTTONUP', 'EVENT_MOUSEHWHEEL', 'EVENT_MOUSEMOVE', 'EVENT_MOUSEWHEEL',
 # 'EVENT_RBUTTONDBLCLK', 'EVENT_RBUTTONDOWN', 'EVENT_RBUTTONUP']
 events = [i for i in dir(cv) if 'EVENT' in i]
+img = np.zeros((512, 512, 3), np.uint8)
 l_button_click_flag = False
 r_button_click_flag = False
 
@@ -57,9 +58,8 @@ def mouse_click_events_1(event, x, y, flags, param):
             mode = True
 
 
-if __name__ == '__main__':
+def mouse_print():
     # Create a black image, a window and bind the function to window
-    img = np.zeros((512, 512, 3), np.uint8)
     cv.namedWindow('image')
     # cv.setMouseCallback('image', mouse_click_events)    # 鼠标事件绑定
     cv.setMouseCallback('image', mouse_click_events_1)  # 鼠标事件绑定
@@ -68,3 +68,41 @@ if __name__ == '__main__':
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
     cv.destroyAllWindows()
+
+
+# ================================================================================
+def nothing(x):
+    pass
+
+
+def color_palette():
+    # Create a black image, a window
+    img = np.zeros((300, 512, 3), np.uint8)
+    cv.namedWindow('image')
+    # create trackbars for color change
+    cv.createTrackbar('R', 'image', 0, 255, nothing)
+    cv.createTrackbar('G', 'image', 0, 255, nothing)
+    cv.createTrackbar('B', 'image', 0, 255, nothing)
+    # create switch for ON/OFF functionality
+    switch = 'OFF - ON'
+    cv.createTrackbar(switch, 'image', 0, 1, nothing)
+    while (True):
+        cv.imshow('image',img)
+        k = cv.waitKey(1) & 0xFF
+        if k == 27:
+            break
+        # get current positions of four trackbars
+        r = cv.getTrackbarPos('R', 'image')
+        g = cv.getTrackbarPos('G', 'image')
+        b = cv.getTrackbarPos('B', 'image')
+        s = cv.getTrackbarPos(switch, 'image')
+        if s == 0:
+            img[:] = 0
+        else:
+            img[:] = [b, g, r]
+    cv.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    # mouse_print()
+    color_palette()
