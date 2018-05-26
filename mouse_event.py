@@ -32,19 +32,22 @@ ix, iy = -1, -1
 # mouse callback function
 def mouse_click_events_1(event, x, y, flags, param):
     global ix, iy, drawing, mode
+    line_width = 2
+
     if event == cv.EVENT_LBUTTONDOWN:
         drawing = True
         ix, iy = x, y
     elif event == cv.EVENT_MOUSEMOVE:
         if drawing is True:
             if mode is True:
-                cv.rectangle(img, (ix, iy), (x, y), (0, 255, 0), -1)
+                cv.rectangle(img, (ix, iy), (x - line_width, y - line_width), (0, 0, 0), line_width)
+                cv.rectangle(img, (ix, iy), (x, y), (0, 255, 0), line_width)
             else:
                 cv.circle(img, (x, y), 5, (0, 0, 255), -1)
     elif event == cv.EVENT_LBUTTONUP:
         drawing = False
         if mode is True:
-            cv.rectangle(img, (ix, iy), (x, y), (0, 255, 0), -1)
+            cv.rectangle(img, (ix, iy), (x, y), (0, 255, 0), line_width)
         else:
             cv.circle(img, (x, y), 5, (0, 0, 255), -1)
     elif event == cv.EVENT_RBUTTONDOWN:
