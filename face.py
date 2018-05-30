@@ -108,19 +108,6 @@ def get_face_1(image):
     return image
 
 
-# 加载播放video
-def load_video(video_path):
-    cap = cv2.VideoCapture(video_path)
-    while (cap.isOpened()):
-        ret, frame = cap.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('frame', gray)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-    cap.release()
-    cv2.destroyAllWindows()
-
-
 def get_face_with_video():
     cam = cv2.VideoCapture(0)                                           # 调用计算机摄像头，一般默认为0
 
@@ -177,9 +164,47 @@ def get_face_with_image(face_path, save_name):
     cv2.destroyAllWindows()
 
 
+# import datetime
+#
+# # 加载播放video
+# def load_video(video_path):
+#     cap = cv2.VideoCapture(video_path)
+#     while (cap.isOpened()):
+#         ret, image = cap.read()
+#         model = pr.LPR("model/cascade.xml", "model/model12.h5", "model/ocr_plate_all_gru.h5")
+#         for pstr, confidence, rect in model.SimpleRecognizePlateByE2E(image):
+#             if confidence > 0.7:
+#                 image = drawRectBox(image, rect, pstr + " " + str(round(confidence, 3)))
+#                 print("plate_str:")
+#                 print(pstr)
+#                 print("plate_confidence")
+#                 print(confidence)
+#                 cv2.imwrite('iamge' + str(datetime.datetime.now().strftime('%Y%m%d%H%M%S')), image)
+#         cv2.imshow("image", image)
+#         if cv2.waitKey(1) & 0xFF == ord('q'):
+#             break
+#     cap.release()
+#     cv2.destroyAllWindows()
+
+
+# 加载播放video
+def load_video(video_path):
+    cap = cv2.VideoCapture(video_path)
+    while (cap.isOpened()):
+        ret, frame = cap.read()
+        # print(frame.shape)
+        # frame = get_eyes(frame)
+        # frame = cv2.cvtColor(frame, 0)
+        cv2.imshow('frame', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
+
 if __name__ == '__main__':
     # get_face_with_video()
-    load_video('output.mp4')
+    load_video('video\\video1.mp4')
 
     # get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg.jpg', 'save.jpg')
     # get_face_with_image('C:\\Soft\\PythonWorkspace\\MyOpenCV\\image\\timg1.jpg', 'save1.jpg')
