@@ -18,11 +18,8 @@ USE_CUDA = torch.cuda.is_available()
 def detectFace(im):
     start = time.time()
     im = cv2.resize(im, (1024, 1024))
-    # print(im)
     im_tensor = torch.from_numpy(im.transpose((2, 0, 1)))
-    # print(im_tensor)
     im_tensor = im_tensor.float().div(255)
-    # print(im_tensor)
 
     # loc, conf = net(Variable(torch.unsqueeze(im_tensor, 0).cuda() if USE_CUDA else torch.unsqueeze(im_tensor, 0)))
     # boxes, labels, probs = data_encoder.decode(loc.data.squeeze(0).cpu() if USE_CUDA else loc.data.squeeze(0), F.softmax(conf.squeeze(0), 1).data.cpu() if USE_CUDA else F.softmax(conf.squeeze(0), 1).data)
@@ -31,24 +28,15 @@ def detectFace(im):
     #     pitem = p.item() if torch.is_tensor(p) else p
     #     ps.append(pitem)
     print('detectFace time:', time.time() - start)
-    # print(im_tensor)
     # return boxes, ps
 
 
 def detectFace_1(im):
     start = time.time()
     im = cv2.resize(im, (1024, 1024))
-    # print(im)
     im_tensor = torch.from_numpy(im.transpose((2, 0, 1)))
-    # print(im_tensor)
-    # print('USE_CUDA', USE_CUDA)
-    # if USE_CUDA:
-    #     im_tensor = Variable(torch.unsqueeze(im_tensor, 0).cuda())
-    # else:
-    #     im_tensor = Variable(torch.unsqueeze(im_tensor, 0))
     im_tensor = Variable(torch.unsqueeze(im_tensor, 0).cuda() if USE_CUDA else torch.unsqueeze(im_tensor, 0))
     im_tensor = im_tensor.float().div(255)
-    # print(im_tensor)
 
     # loc, conf = net(Variable(torch.unsqueeze(im_tensor, 0).cuda() if USE_CUDA else torch.unsqueeze(im_tensor, 0)))
     # boxes, labels, probs = data_encoder.decode(loc.data.squeeze(0).cpu() if USE_CUDA else loc.data.squeeze(0), F.softmax(conf.squeeze(0), 1).data.cpu() if USE_CUDA else F.softmax(conf.squeeze(0), 1).data)
@@ -57,8 +45,6 @@ def detectFace_1(im):
     #     pitem = p.item() if torch.is_tensor(p) else p
     #     ps.append(pitem)
     print('detectFace_1 time:', time.time() - start)
-    # print(im_tensor)
-
     # return boxes, ps
 
 
