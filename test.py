@@ -47,7 +47,6 @@ def detectFace_1(im):
     # else:
     #     im_tensor = Variable(torch.unsqueeze(im_tensor, 0))
     im_tensor = Variable(torch.unsqueeze(im_tensor, 0).cuda() if USE_CUDA else torch.unsqueeze(im_tensor, 0))
-    print(1)
     im_tensor = im_tensor.float().div(255)
     # print(im_tensor)
 
@@ -83,6 +82,9 @@ def get_face_with_video():
             # frame = get_fullbody(frame)
             # frame = get_upperbody(frame)
             # out.write(frame)
+            # print(frame)
+            detectFace(frame)
+            detectFace_1(frame)
 
             cv2.imshow('MyCamera', frame)
 
