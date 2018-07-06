@@ -15,6 +15,7 @@ from torch.autograd import Variable
 USE_CUDA = torch.cuda.is_available()
 
 
+# ======================================================================================================================
 def detectFace(im):
     start = time.time()
     im = cv2.resize(im, (1024, 1024))
@@ -61,19 +62,9 @@ def get_face_with_video():
         ret, frame = cam.read()             # 逐帧捕获
         if ret is True:
             # 输出当前帧
-            # frame = get_face(frame)
-            # frame = get_eyes(frame)
-            # frame = get_mouth(frame)
-            # frame = get_nose(frame)
-            # frame = get_fullbody(frame)
-            # frame = get_upperbody(frame)
-            # out.write(frame)
-            # print(frame)
             detectFace(frame)
             detectFace_1(frame)
-
             cv2.imshow('MyCamera', frame)
-
             if (cv2.waitKey(1) & 0xFF) == ord('q'):
                 break
         else:
@@ -84,12 +75,46 @@ def get_face_with_video():
     cv2.destroyAllWindow()
 
 
-if __name__ == '__main__':
-    get_face_with_video()
+def test():
+    img = cv2.imread('568640.jpg')
+    # img = cv2.resize(img, (800, 480))
+    rows, cols, ch = img.shape
 
-    # # data = Variable(torch.randn(1, 3, 1024, 1024))
-    # a = np.random.random((1024, 1024, 3))
-    # # print('data size', data.size())
-    # print('a size', a.shape)
-    # detectFace(a)
-    # detectFace_1(a)
+    pts1 = np.float32([[50, 50], [200, 50], [50, 200]])
+    pts2 = np.float32([[50, 34], [200, 50], [50, 186]])
+
+    M = cv2.getAffineTransform(pts1, pts2)
+
+    dst = cv2.warpAffine(img, M, (cols, rows))
+
+    cv2.imshow('Input', img)
+    cv2.imshow('Output', dst)
+    cv2.imwrite('111.jpg', dst)
+    cv2.waitKey(0)
+    # plt.subplot(121), plt.imshow(img), plt.title('Input')
+    # plt.subplot(122), plt.imshow(dst), plt.title('Output')
+    # plt.show()
+    return
+
+def test_1():
+    img = cv2.imread('568640.jpg')
+    rows, cols, ch = img.shape
+
+    pts1 = np.float32([[56, 65], [368, 52], [28, 387], [389, 390]])
+    pts2 = np.float32([[0, 0], [300, 0], [0, 300], [300, 300]])
+
+    M = cv2.getPerspectiveTransform(pts1, pts2)
+
+    dst = cv2.warpPerspective(img, M, (300, 300))
+
+    cv2.imshow('Input', img)
+    cv2.imshow('Output', dst)
+    cv2.waitKey(0)
+    # plt.subplot(121), plt.imshow(img), plt.title('Input')
+    # plt.subplot(122), plt.imshow(dst), plt.title('Output')
+    # plt.show()
+    return
+
+if __name__ == '__main__':
+    # get_face_with_video()
+    test()
