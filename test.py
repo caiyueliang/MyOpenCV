@@ -76,8 +76,8 @@ def get_face_with_video():
 
 
 def test():
-    img = cv2.imread('568640.jpg')
-    # img = cv2.resize(img, (800, 480))
+    img = cv2.imread('550514.jpg')
+    img = cv2.resize(img, (1280, 720))
     rows, cols, ch = img.shape
 
     pts1 = np.float32([[50, 50], [200, 50], [50, 200]])

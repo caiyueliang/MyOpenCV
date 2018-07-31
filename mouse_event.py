@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import cv2 as cv
 import numpy as np
 
@@ -6,7 +7,6 @@ import numpy as np
 # 'EVENT_MBUTTONDOWN', 'EVENT_MBUTTONUP', 'EVENT_MOUSEHWHEEL', 'EVENT_MOUSEMOVE', 'EVENT_MOUSEWHEEL',
 # 'EVENT_RBUTTONDBLCLK', 'EVENT_RBUTTONDOWN', 'EVENT_RBUTTONUP']
 events = [i for i in dir(cv) if 'EVENT' in i]
-img = np.zeros((512, 512, 3), np.uint8)
 l_button_click_flag = False
 r_button_click_flag = False
 
@@ -14,7 +14,7 @@ r_button_click_flag = False
 # mouse callback function
 def mouse_click_events(event, x, y, flags, param):
     global l_button_click_flag
-    if event == cv.EVENT_LBUTTONDBLCLK:                 # 鼠标左键双击事件响应
+    if event == cv.EVENT_LBUTTONDBLCLK:                     # 鼠标左键双击事件响应
         cv.circle(img, (x, y), 100, (255, 0, 0), -1)
     elif event == cv.EVENT_LBUTTONDOWN:
         l_button_click_flag = True
@@ -61,8 +61,8 @@ def mouse_click_events_1(event, x, y, flags, param):
 def mouse_print():
     # Create a black image, a window and bind the function to window
     cv.namedWindow('image')
-    # cv.setMouseCallback('image', mouse_click_events)    # 鼠标事件绑定
-    cv.setMouseCallback('image', mouse_click_events_1)  # 鼠标事件绑定
+    # cv.setMouseCallback('image', mouse_click_events)          # 鼠标事件绑定
+    cv.setMouseCallback('image', mouse_click_events_1)          # 鼠标事件绑定
     while (True):
         cv.imshow('image', img)
         if cv.waitKey(1) & 0xFF == ord('q'):
