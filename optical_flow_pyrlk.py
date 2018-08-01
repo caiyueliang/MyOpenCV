@@ -150,8 +150,6 @@ def main():
 if __name__ == '__main__':
     main()
 
-if __name__ == '__main__':
-    cv2.calcOpticalFlowPyrLK()
-    cv2.calcOpticalFlowFarneback()
-    cv2.createBackgroundSubtractorMOG2()
-    cv2.createBackgroundSubtractorKNN()
+# if __name__ == '__main__':
+#     cv2.calcOpticalFlowPyrLK()
+#     cv2.calcOpticalFlowFarneback()
