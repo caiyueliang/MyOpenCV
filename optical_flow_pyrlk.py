@@ -17,6 +17,7 @@ from numpy import *
 import numpy as np
 import cv2
 import sys
+import datetime
 # from common import anorm2, draw_str
 # from time import clock
 
@@ -25,7 +26,7 @@ lk_params = dict(winSize=(15, 15),
                  maxLevel=2,
                  criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
-feature_params = dict(maxCorners=100,
+feature_params = dict(maxCorners=500,
                       qualityLevel=0.3,
                       minDistance=7,
                       blockSize=7)
@@ -34,7 +35,7 @@ feature_params = dict(maxCorners=100,
 class App:
     def __init__(self, video_src):                                      # 构造方法，初始化一些参数和视频路径
         self.track_len = 10
-        self.detect_interval = 4                                        # 每隔多少帧检测一次特征点
+        self.detect_interval = 5                                        # 每隔多少帧检测一次特征点
         self.tracks = []
         self.cam = cv2.VideoCapture(video_src)
         self.frame_idx = 0
@@ -91,6 +92,48 @@ class App:
             if ch == 27:
                 break
 
+    # 背景减除
+    def background_subtractor_MOG2(self):
+        cap = self.cam
+
+        fgbg = cv2.createBackgroundSubtractorMOG2()
+        # fgbg = cv2.createBackgroundSubtractorKNN()
+
+        # fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        # frame1 = np.zeros((640, 480))
+        # out = cv2.VideoWriter(datetime.datetime.now().strftime("%A_%d_%B_%Y_%I_%M_%S%p") + '.avi', fourcc, 5.0, np.shape(frame1))
+
+        while (True):
+            ret, frame = cap.read()
+            frame = cv2.GaussianBlur(frame, (3, 3), 1.5)        # 高斯模糊
+
+            fgmask = fgbg.apply(frame)
+            cv2.imshow('fgmask', fgmask)
+            (_, cnts, _) = cv2.findContours(fgmask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            maxArea = 0
+            for c in cnts:
+                Area = cv2.contourArea(c)
+                if Area < maxArea:
+                    # if cv2.contourArea(c) < 500:
+                    (x, y, w, h) = (0, 0, 0, 0)
+                    continue
+                else:
+                    if Area < 1000:
+                        (x, y, w, h) = (0, 0, 0, 0)
+                        continue
+                    else:
+                        maxArea = Area
+                        m = c
+                        (x, y, w, h) = cv2.boundingRect(m)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                # out.write(frame)
+            cv2.imshow('frame', frame)
+            ch = 0xFF & cv2.waitKey(1)
+            if ch == 27:
+                break
+
+        # out.release()
+        cap.release()
 
 def main():
     try:
@@ -99,13 +142,16 @@ def main():
         video_src = "/cyl_data/2018070718.mp4"
 
     print __doc__
-    App(video_src).run()
+    # App(video_src).run()
+    App(video_src).background_subtractor_MOG2()
     cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
     main()
 
-# if __name__ == '__main__':
-#     cv2.calcOpticalFlowPyrLK()
-#     cv2.calcOpticalFlowFarneback()
+if __name__ == '__main__':
+    cv2.calcOpticalFlowPyrLK()
+    cv2.calcOpticalFlowFarneback()
+    cv2.createBackgroundSubtractorMOG2()
+    cv2.createBackgroundSubtractorKNN()
